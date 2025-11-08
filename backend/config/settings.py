@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # Local apps
     'articles',
     'comments',
@@ -38,9 +38,21 @@ INSTALLED_APPS = [
     'analytics',
     'categories_tags',
     'notifications',
-    'core'
-    
+    'core',
+
     # 3rd-party apps
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders',
+    'django_filters',
+    'drf_spectacular',
+    'channels',
+    'django_celery_beat',
+
+    # Development only (remove in production)
+    'debug_toolbar',
+
+
 ]
 
 MIDDLEWARE = [
