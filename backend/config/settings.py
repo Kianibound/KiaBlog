@@ -29,16 +29,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Local apps
-    'articles',
-    'comments',
-    'chat',
-    'bookmarks',
-    'audit',
-    'users',
-    'analytics',
-    'categories_tags',
-    'notifications',
-    'core',
+    'apps.articles',
+    'apps.comments',
+    'apps.chat',
+    'apps.bookmarks',
+    'apps.audit',
+    'apps.users',
+    'apps.analytics',
+    'apps.categories_tags',
+    'apps.notifications',
+    'apps.core',
 
     # 3rd-party apps
     'rest_framework',
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'channels',
     'django_celery_beat',
+    'django_extensions',
 
     # Development only (remove in production)
     'debug_toolbar',
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'

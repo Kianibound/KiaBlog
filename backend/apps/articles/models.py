@@ -1,23 +1,30 @@
 from django.db import models
-# from apps.core.models import TimeStampedModel
+from django.utils.text import slugify
+# from apps.core.models import TimeStampedModel  # Your reusable base – DRY win!
 
 
+class ArticleStatus(models.TextChoices):
+    DRAFT = 'draft', 'Draft'
+    PUBLISHED = 'published', 'Published'
 
-class Article(models.Model):
-  # author = models.ForeignKey(User, on_delete=models.CASCADE)
-  title = models.CharField(max_length=255)
-  content = models.TextField()
-  # image = models.ImageField(upload_to='images/')
-  # bookmark = models.ForeignKey(Bookmark, on_delete=models.CASCADE)
-  # comments = models.ForeignKey(Comment, on_delete=models.CASCADE)
-  #TODO: Use TimeStampedModel
-  created_at = models.DateTimeField(auto_now_add=True)
-  updated_at = models.DateTimeField(auto_now=True)
-  deleted_at = models.DateTimeField(null=True, blank=True)
-  
-  class Meta:
-    verbose_name = 'article'
-    verbose_name_plural = 'articles'
 
-  def __str__(self):
-    return self.title
+class Article(models.Model):  # Concrete: Full DB table
+    title = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    content = models.TextField()
+    status = models.CharField(
+        max_length=10, choices=ArticleStatus.choices, default=ArticleStatus.DRAFT)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):  # Auto-slug: Best practice for readability
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['-created_at']  # Newest first – user-friendly
+        verbose_name_plural = 'Articles'
