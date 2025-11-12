@@ -6,14 +6,13 @@ from .models import Article
 from .serializers import ArticleSerializer
 
 
-# Full CRUD: List/Create/Retrieve/Update/Destroy
 class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = Article.objects.all().select_related() # Efficient: No extra queries
+    queryset = Article.objects.prefetch_related(
+        'category', 'tags')
     serializer_class = ArticleSerializer
-    filter_backends = [DjangoFilterBackend]  # For ?status=published
-    filterset_fields = ['status']  # Queryable – scales to prod
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['status', 'category', 'tags__name']
 
-    # Custom: /articles/drafts/ – bonus for interviews
     @action(detail=False, methods=['get'])
     def drafts(self, request):
         drafts = self.get_queryset().filter(status='draft')
