@@ -1,21 +1,23 @@
-# from django.db import models
-# from django.utils import timezone  # For manual timestamps if needed
+from django.db import models
+import uuid
+from django.utils import timezone
 
-# class TimeStampedModel(models.Model):  # Base: models.Model, NOT (abstract=True)
-#     created_at = models.DateTimeField(auto_now_add=True)  # Auto-sets on create
-#     updated_at = models.DateTimeField(auto_now=True)      # Auto-updates on save
 
-#     class Meta:  # Here's the "abstract" flag – like a recipe note
-#         abstract = True  # No DB table; inherit only
+class TimeStampedModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-#     # Optional: Custom save for manual tweaks
-#     def save(self, *args, **kwargs):
-#         if not self.created_at:
-#             self.created_at = timezone.now()
-#         super().save(*args, **kwargs)
+    class Meta:
+        abstract = True
 
-# class UUIDModel(models.Model):  # Bonus: For UUID PKs (secure, distributed IDs)
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = timezone.now()
+        super().save(*args, **kwargs)
 
-#     class Meta:
-#         abstract = True
+
+class UUIDModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    class Meta:
+        abstract = True

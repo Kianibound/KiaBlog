@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-# from apps.core.models import TimeStampedModel  # Your reusable base – DRY win!
+from apps.core.models import TimeStampedModel
 
 
 class ArticleStatus(models.TextChoices):
@@ -8,16 +8,14 @@ class ArticleStatus(models.TextChoices):
     PUBLISHED = 'published', 'Published'
 
 
-class Article(models.Model):  # Concrete: Full DB table
+class Article(TimeStampedModel):
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     content = models.TextField()
     status = models.CharField(
         max_length=10, choices=ArticleStatus.choices, default=ArticleStatus.DRAFT)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
-    def save(self, *args, **kwargs):  # Auto-slug: Best practice for readability
+    def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
@@ -26,5 +24,5 @@ class Article(models.Model):  # Concrete: Full DB table
         return self.title
 
     class Meta:
-        ordering = ['-created_at']  # Newest first – user-friendly
+        ordering = ['-created_at']
         verbose_name_plural = 'Articles'
