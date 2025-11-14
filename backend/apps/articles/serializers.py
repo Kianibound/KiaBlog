@@ -2,15 +2,19 @@ from rest_framework import serializers
 from .models import Article
 from apps.categories_tags.models import Tag
 from apps.categories_tags.serializers import CategorySerializer, TagSerializer
+from apps.comments.serializers import CommentSerializer
 
 
 class ArticleSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
+    comments_count = serializers.IntegerField(
+        source='comments.count', read_only=True)
 
     class Meta:
         model = Article
-        fields = ['id', 'title', 'slug', 'content', 'status',
+        fields = ['id', 'title', 'slug', 'content', 'status', 'comments', 'comments_count',
                   'category', 'tags', 'created_at', 'updated_at']
         read_only_fields = ['slug', 'created_at', 'updated_at']
 

@@ -8,4 +8,6 @@ urlpatterns = [
     path('api/v1/', include('apps.articles.urls')),
     # versioning – /api/v1/categories/
     path('api/v1/', include('apps.categories_tags.urls')),
+    # versioning – /api/v1/comments/
+    path('api/v1/', include('apps.comments.urls')),
 ]
